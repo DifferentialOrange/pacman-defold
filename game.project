@@ -12,5 +12,5 @@ height = 848
 input_method = HiddenInputField
 
 [project]
-title = pacman-defold
+title = Pac-Man
 
