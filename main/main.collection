@@ -3,7 +3,7 @@ instances {
   id: "pacman"
   prototype: "/main/pacman.go"
   position {
-    x: 327.0
+    x: 328.0
     y: 360.0
     z: 0.0
   }

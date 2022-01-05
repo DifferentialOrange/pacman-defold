@@ -1,3 +1,19 @@
+-- To make movement smooth, we allow Pac-Man to change
+-- movement direction only in certain points. Without
+-- that, it would be easy to stuck while trying to fit
+-- into pass with width of a Pac-Man collision box.
+local GRID_DIST = 32
+local GRID_START = vmath.vector3(40, 40, 0)
+
+local function is_grid_point(pos)
+	if  pos.x % GRID_DIST == GRID_START.x % GRID_DIST
+	and pos.y % GRID_DIST == GRID_START.y % GRID_DIST then
+		return true
+	end
+
+	return false
+end
+
 function init(self)
 	msg.post(".", "acquire_input_focus")
 
@@ -5,8 +21,7 @@ function init(self)
 
 	self.input = vmath.vector3()
 	self.dir = vmath.vector3(1, 0, 0)
-	self.speed = 50
-	self.moving_playback_rate = go.get("#sprite", "playback_rate")
+	self.speed = 60 * 2
 	-- correction vector
 	self.correction = vmath.vector3()
 end
@@ -19,15 +34,15 @@ function update(self, dt)
 	-- reset correction
 	self.correction = vmath.vector3()
 
-	if self.moving then
-		local pos = go.get_position()
-		pos = pos + self.dir * self.speed * dt
-		go.set_position(pos)
-		go.set("#sprite", "playback_rate", self.moving_playback_rate)
-	else
-		-- Idle animation
-		go.set("#sprite", "playback_rate", 0)
+	local pos = go.get_position()
+	if is_grid_point(pos) then
+		print(update)
+		-- Deepcopy vector
+		self.dir = vmath.vector3(self.input)
 	end
+
+	pos = pos + self.dir * self.speed * dt
+	go.set_position(pos)
 
 	local anim
 
@@ -45,27 +60,22 @@ function update(self, dt)
 		msg.post("#sprite", "play_animation", { id = anim })
 		self.current_anim = anim
 	end
-
-	self.input.x = 0
-	self.input.y = 0
-
-	self.moving = false
 end
 
 function on_input(self, action_id, action)
-	if action_id == hash("up") then
-		self.input.y = 1
-	elseif action_id == hash("down") then
-		self.input.y = -1
-	elseif action_id == hash("left") then
-		self.input.x = -1
-	elseif action_id == hash("right") then
-		self.input.x = 1
-	end
-
-	if vmath.length(self.input) > 0 then
-		self.moving = true
-		self.dir = vmath.normalize(self.input)
+	if action.pressed then
+		self.input.x = 0
+		self.input.y = 0
+		
+		if action_id == hash("up") then
+			self.input.y = 1
+		elseif action_id == hash("down") then
+			self.input.y = -1
+		elseif action_id == hash("left") then
+			self.input.x = -1
+		elseif action_id == hash("right") then
+			self.input.x = 1
+		end
 	end
 end
 
