@@ -3886,7 +3886,7 @@ embedded_instances {
   "friction: 0.1\\n"
   "restitution: 0.5\\n"
   "group: \\\"\\\"\\n"
-  "mask: \\\"pacman\\\"\\n"
+  "mask: \\\"pacman_mv\\\"\\n"
   "linear_damping: 0.0\\n"
   "angular_damping: 0.0\\n"
   "locked_rotation: false\\n"
