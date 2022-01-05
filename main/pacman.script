@@ -36,7 +36,6 @@ function update(self, dt)
 
 	local pos = go.get_position()
 	if is_grid_point(pos) then
-		print(update)
 		-- Deepcopy vector
 		self.dir = vmath.vector3(self.input)
 	end
