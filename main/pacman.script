@@ -14,20 +14,42 @@ local function is_grid_point(pos)
 	return false
 end
 
+local function copyv3(v)
+	return vmath.vector3(v)
+end
+
+local function pos_equal(pos1, pos2)
+	return pos1.x == pos2.x and pos1.y == pos2.y
+end
+
 function init(self)
 	msg.post(".", "acquire_input_focus")
-
-	self.moving = false
 
 	self.input = vmath.vector3()
 	self.dir = vmath.vector3(1, 0, 0)
 	self.speed = 60 * 2
 	-- correction vector
 	self.correction = vmath.vector3()
+
+	self.prev_pos = go.get_position()
 end
 
 function final(self)
 	msg.post(".", "release_input_focus")
+end
+
+local function get_dir(self)
+	if self.dir.x > 0 then
+		return "right"
+	elseif self.dir.x < 0 then
+		return "left"
+	elseif self.dir.y > 0 then
+		return "up"
+	elseif self.dir.y < 0 then
+		return "down"
+	end
+
+	return ""
 end
 
 function update(self, dt)
@@ -35,25 +57,27 @@ function update(self, dt)
 	self.correction = vmath.vector3()
 
 	local pos = go.get_position()
+
+	local idle = false
+	if pos_equal(pos, self.prev_pos) then
+		idle = true
+	end
+	self.prev_pos = copyv3(pos)
+
 	if is_grid_point(pos) then
 		-- Deepcopy vector
-		self.dir = vmath.vector3(self.input)
+		self.dir = copyv3(self.input)
 	end
 
 	pos = pos + self.dir * self.speed * dt
 	go.set_position(pos)
 
-	local anim
-
-	if self.dir.x > 0 then
-		anim = hash("right")
-	elseif self.dir.x < 0 then
-		anim = hash("left")
-	elseif self.dir.y > 0 then
-		anim = hash("up")
-	elseif self.dir.y < 0 then
-		anim = hash("down")
+	local anim_id = get_dir(self)
+	if idle then
+		anim_id = "idle-" .. anim_id
 	end
+
+	local anim = hash(anim_id)
 
 	if anim ~= self.current_anim then
 		msg.post("#sprite", "play_animation", { id = anim })

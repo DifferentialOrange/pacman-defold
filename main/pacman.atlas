@@ -90,6 +90,50 @@ animations {
   flip_horizontal: 0
   flip_vertical: 0
 }
+animations {
+  id: "idle-right"
+  images {
+    image: "/assets/units/pacman/right_1.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_NONE
+  fps: 0
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "idle-left"
+  images {
+    image: "/assets/units/pacman/right_1.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_NONE
+  fps: 0
+  flip_horizontal: 1
+  flip_vertical: 0
+}
+animations {
+  id: "idle-up"
+  images {
+    image: "/assets/units/pacman/down_1.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_NONE
+  fps: 0
+  flip_horizontal: 0
+  flip_vertical: 1
+}
+animations {
+  id: "idle-down"
+  images {
+    image: "/assets/units/pacman/down_1.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_NONE
+  fps: 0
+  flip_horizontal: 0
+  flip_vertical: 0
+}
 margin: 0
 extrude_borders: 0
 inner_padding: 0
